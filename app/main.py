@@ -23,12 +23,7 @@
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-
-from models.chat_models import (
-    ChatRequest,
-    ChatResponse
-)
-
+from models.chat_models import ChatRequest, ChatResponse
 from services.llm_service import ask_llm
 
 app = FastAPI()
@@ -51,7 +46,8 @@ def chat(request: ChatRequest):
     try:
 
         answer = ask_llm(
-            request.question
+            request.session_id,
+            request.question,
         )
 
         return ChatResponse(
@@ -64,6 +60,13 @@ def chat(request: ChatRequest):
             status_code=500,
             detail=str(e)
         )
+
+
+
+
+
+
+
 
 
 

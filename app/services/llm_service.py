@@ -47,9 +47,17 @@
 
 #     return answer
 
+from pathlib import Path
+
+from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.messages import HumanMessage, AIMessage
+from memory.chat_memory import get_session_history
+
+
+load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 llm = ChatGroq(
     model="openai/gpt-oss-20b",
@@ -69,15 +77,18 @@ parser = StrOutputParser()
 chain = prompt | llm | parser
 
 
-def ask_llm(question):
+def ask_llm(session_id, question):
+    history = get_session_history(session_id)
 
-    return chain.invoke(
-        {
-            "question": question
-        }
-    )
+    history.append(HumanMessage(content=question))
 
+    answer = chain.invoke({
+        "question": question,
+        "history": history,
+    })
 
+    history.append(AIMessage(content=answer))
+    return answer
 
 
 
