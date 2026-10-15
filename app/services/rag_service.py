@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 from langchain_community.document_loaders import (
     PyPDFLoader
@@ -32,9 +32,12 @@ from langchain_core.prompts import (
 # LOAD PDF
 # -----------------------------------
 
-loader = PyPDFLoader(
-    "./documents/CAREER_counsellor.pdf"
+document_path = (
+    Path(__file__).resolve().parents[1]
+    / "documents"
+    / "CAREER_counsellor.pdf"
 )
+loader = PyPDFLoader(str(document_path))
 
 raw_documents = loader.load()
 
@@ -142,8 +145,6 @@ def ask_rag(question):
     )
 
     return response["answer"]
-
-
 
 
 
