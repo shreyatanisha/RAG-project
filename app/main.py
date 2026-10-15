@@ -25,6 +25,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from models.chat_models import ChatRequest, ChatResponse
 from services.llm_service import ask_llm
+from services.rag_service import ask_rag
 
 app = FastAPI()
 
@@ -42,7 +43,6 @@ def root():
 
 @app.post("/chat", response_model=ChatResponse)
 def chat(request: ChatRequest):
-
     try:
 
         answer = ask_llm(
@@ -55,11 +55,21 @@ def chat(request: ChatRequest):
         )
 
     except Exception as e:
-
         raise HTTPException(
             status_code=500,
             detail=str(e)
         )
+
+@app.post("/chat/rag")
+def chat_rag(request: ChatRequest):
+
+    answer = ask_rag(
+        request.question
+    )
+
+    return {
+        "answer": answer
+    }
 
 
 
