@@ -1,6 +1,14 @@
 fastapi
 uvicorn
+langchain
+langchain-classic
 langchain-core
 langchain-groq
+langchain-community
+langchain-text-splitters
+langchain-huggingface
+langchain-chroma
+pypdf
+sentence-transformers
 pydantic
 python-dotenv
