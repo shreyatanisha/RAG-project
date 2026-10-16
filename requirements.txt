@@ -6,9 +6,7 @@ langchain-core
 langchain-groq
 langchain-community
 langchain-text-splitters
-langchain-huggingface
-langchain-chroma
+rank-bm25
 pypdf
-sentence-transformers
 pydantic
 python-dotenv
