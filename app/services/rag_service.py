@@ -1,3 +1,4 @@
+import hashlib
 from functools import lru_cache
 from pathlib import Path
 
@@ -19,6 +20,7 @@ def _get_rag_pipeline():
         / "documents"
         / "tvmto bbsr2.pdf"
     )
+    document_hash = hashlib.sha256(document_path.read_bytes()).hexdigest()[:12]
     raw_documents = PyPDFLoader(str(document_path)).load()
 
     text_splitter = RecursiveCharacterTextSplitter(
@@ -30,10 +32,12 @@ def _get_rag_pipeline():
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     
     vector_store = Chroma.from_documents(
-    documents=split_docs,
-    embedding=embeddings,
-    persist_directory="vector_db"
-)
+        documents=split_docs,
+        embedding=embeddings,
+        ids=[f"chunk-{index}" for index in range(len(split_docs))],
+        collection_name=f"tvmto_bbsr2_{document_hash}",
+        persist_directory=str(Path(__file__).resolve().parents[1] / "vectordb"),
+    )
 
     llm = ChatGroq(model="openai/gpt-oss-20b", temperature=0.2)
 
