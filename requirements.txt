@@ -5,7 +5,10 @@ langchain-classic
 langchain-core
 langchain-groq
 langchain-community
+langchain-huggingface
+langchain-chroma
 langchain-text-splitters
+sentence-transformers
 rank-bm25
 pypdf
 pydantic
